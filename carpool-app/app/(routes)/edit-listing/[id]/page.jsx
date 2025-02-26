@@ -93,23 +93,35 @@ function EditListing() {
     setLoading(false);
   };
 
+  const publishListing = async (values) => {
+    if (!listingId) return;
+    setLoading(true);
+
+    const { error } = await supabase
+      .from("listing")
+      .update({
+        type: values.type,
+        title: values.title,
+        date: values.date,
+        time: values.time,
+        passenger: values.passenger,
+        price: values.price,
+        description: values.description,
+        active: true, // Now setting active to true when publishing
+      })
+      .eq("id", listingId);
+
+    if (error) {
+      toast.error("Failed to publish listing");
+    } else {
+      toast.success("Listing published!");
+      router.refresh();
+    }
+
+    setLoading(false);
+  };
+
   if (!listing) return null;
-
-  const publishBtnHandle=async() =>{
-setLoading(true)
-const { data, error } = await supabase
-.from('listing')
-.update({ active:true })
-.eq('id', params?.id)
-.select()
-
-if(data)
-{
-  setLoading(false)
-  toast('Listing published!')
-}
-        
-  }
 
   return (
     <div className="px-10 md:px-36 my-10">
@@ -260,7 +272,7 @@ if(data)
                   />
                 </div>
               </div>
-
+              {/* Button */}
               <div className="flex gap-7 justify-end">
                 <Button disabled={loading} variant="outline" type="submit">
                   {loading ? <Loader className="animate-spin" /> : "Save"}
@@ -287,7 +299,7 @@ if(data)
                     </AlertDialogHeader>
                     <AlertDialogFooter>
                       <AlertDialogCancel>Cancel</AlertDialogCancel>
-                      <AlertDialogAction onClick={()=>publishBtnHandle()}>
+                      <AlertDialogAction onClick={()=>publishListing(values)}>
                         {loading?<Loader className="animate-spin"/>: 'Continue'}
                         </AlertDialogAction>
                     </AlertDialogFooter>

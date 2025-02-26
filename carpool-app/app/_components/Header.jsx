@@ -19,13 +19,21 @@ function Header() {
   return (
     <div className="p-6 px-10 flex justify-between shadow-sm fixed top-0 w-full z-10 bg-white">
       <div className="flex gap-12 items-center">
-        <Image src={"/car.svg"} width={100} height={100} alt="car icon" priority/>
+        <Link href={"/"}>
+          <Image
+            src={"/car.svg"}
+            width={100}
+            height={100}
+            alt="car icon"
+            priority
+          />
+        </Link>
         <ul className="hidden md:flex gap-10">
           {/* Ride Offer Link */}
-          <Link href={"/"}>
+          <Link href={"/ride-offer"}>
             <li
               className={`hover:text-primary text-base font-semibold cursor-pointer ${
-                path === "/" ? "text-primary" : ""
+                path === "/ride-offer" ? "text-primary" : ""
               }`}
             >
               Ride Offer
@@ -65,7 +73,9 @@ function Header() {
           <UserButton />
         ) : (
           <Link href={"/sign-in"}>
-            <Button variant="outline" className="font-semibold">Login</Button>
+            <Button variant="outline" className="font-semibold">
+              Login
+            </Button>
           </Link>
         )}
       </div>

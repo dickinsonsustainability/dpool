@@ -19,7 +19,7 @@ function Header() {
   return (
     <div className="p-6 px-10 flex justify-between shadow-sm fixed top-0 w-full z-10 bg-white">
       <div className="flex gap-12 items-center">
-        <Image src={"/car.svg"} width={100} height={100} alt="car icon" />
+        <Image src={"/car.svg"} width={100} height={100} alt="car icon" priority/>
         <ul className="hidden md:flex gap-10">
           {/* Ride Offer Link */}
           <Link href={"/"}>
@@ -56,14 +56,18 @@ function Header() {
         </ul>
       </div>
       <div className="flex gap-2 items-center">
-        <Button className="flex gap-2">
-          <Plus className="h-5 w-5" /> Post Your Ride
-        </Button>
-        {isSignedIn ? <UserButton /> :
-        <Link href={'/sign-in'}>
-        <Button variant="outline">Login</Button>
+        <Link href={"/add-new-listing"}>
+          <Button className="flex gap-2">
+            <Plus className="h-5 w-5" /> Post Your Ride
+          </Button>
         </Link>
-        }
+        {isSignedIn ? (
+          <UserButton />
+        ) : (
+          <Link href={"/sign-in"}>
+            <Button variant="outline">Login</Button>
+          </Link>
+        )}
       </div>
     </div>
   );

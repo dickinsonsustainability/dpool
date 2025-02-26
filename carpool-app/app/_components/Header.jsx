@@ -24,7 +24,7 @@ function Header() {
           {/* Ride Offer Link */}
           <Link href={"/"}>
             <li
-              className={`hover:text-primary font-medium text-sm cursor-pointer ${
+              className={`hover:text-primary text-base font-semibold cursor-pointer ${
                 path === "/" ? "text-primary" : ""
               }`}
             >
@@ -35,7 +35,7 @@ function Header() {
           {/* Ride Request Link */}
           <Link href={"/ride-request"}>
             <li
-              className={`hover:text-primary font-medium text-sm cursor-pointer ${
+              className={`hover:text-primary text-base font-semibold cursor-pointer ${
                 path === "/ride-request" ? "text-primary" : ""
               }`}
             >
@@ -46,7 +46,7 @@ function Header() {
           {/* Agent Finder Link */}
           <Link href={"/agent-finder"}>
             <li
-              className={`hover:text-primary font-medium text-sm cursor-pointer ${
+              className={`hover:text-primary text-base font-semibold cursor-pointer ${
                 path === "/agent-finder" ? "text-primary" : ""
               }`}
             >
@@ -57,7 +57,7 @@ function Header() {
       </div>
       <div className="flex gap-2 items-center">
         <Link href={"/add-new-listing"}>
-          <Button className="flex gap-2">
+          <Button className="flex gap-2 font-semibold text-base">
             <Plus className="h-5 w-5" /> Post Your Ride
           </Button>
         </Link>
@@ -65,7 +65,7 @@ function Header() {
           <UserButton />
         ) : (
           <Link href={"/sign-in"}>
-            <Button variant="outline">Login</Button>
+            <Button variant="outline" className="font-semibold">Login</Button>
           </Link>
         )}
       </div>

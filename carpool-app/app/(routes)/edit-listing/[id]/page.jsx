@@ -2,7 +2,11 @@
 import React, { useEffect, useState } from "react";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Calendar as CalendarIcon, Clock as ClockIcon } from "lucide-react";
+import {
+  Calendar as CalendarIcon,
+  Clock as ClockIcon,
+  Loader,
+} from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
 import {
   Popover,
@@ -18,13 +22,25 @@ import { supabase } from "@/utils/supabase/client";
 import { toast } from "sonner";
 import { useUser } from "@clerk/nextjs";
 import FileUpload from "../_components/FileUpload";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 function EditListing() {
   const { user } = useUser();
   const router = useRouter();
   const params = useParams();
   const listingId = params?.id;
-  const [listing, setListing] = useState(null); // Set initial state to null
+  const [listing, setListing] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (user && listingId) {
@@ -37,7 +53,7 @@ function EditListing() {
 
     const { data, error } = await supabase
       .from("listing")
-      .select("*") // Fetch all fields
+      .select("*")
       .eq("createdBy", user?.primaryEmailAddress?.emailAddress)
       .eq("id", listingId)
       .single();
@@ -51,6 +67,8 @@ function EditListing() {
 
   const onSubmitHandler = async (formValue) => {
     if (!listingId) return;
+
+    setLoading(true);
 
     const { error } = await supabase
       .from("listing")
@@ -67,33 +85,31 @@ function EditListing() {
 
     if (error) {
       console.error("Error updating listing:", error.message);
+      toast("Error updating listing");
     } else {
       toast("Listing updated and published");
     }
-    for(const image of images)
-    {
-      const file=image;
-      const fileName=Date.now().toString();
-      const fileExt=fileName.split('.').pop();
-      const {data,error}=await supabase.storage
-      .from('listingImages')
-      .upload(`${fileName}`,file,{
-        contentType: `image/${fileExt}`,
-        upsert:false
-      });
 
-      if(error)
-      {
-        toast('Error while uploading images')
-      }
-      else {
-        console.log('data',data);
-      }
-    }
+    setLoading(false);
   };
 
-  // Prevent rendering form until listing data is loaded
   if (!listing) return null;
+
+  const publishBtnHandle=async() =>{
+setLoading(true)
+const { data, error } = await supabase
+.from('listing')
+.update({ active:true })
+.eq('id', params?.id)
+.select()
+
+if(data)
+{
+  setLoading(false)
+  toast('Listing published!')
+}
+        
+  }
 
   return (
     <div className="px-10 md:px-36 my-10">
@@ -137,13 +153,13 @@ function EditListing() {
                   >
                     <div className="flex items-center space-x-2">
                       <RadioGroupItem value="Request" id="Request" />
-                      <Label htmlFor="Request" className="text-lg">
+                      <Label htmlFor="Request" className="text-md">
                         Ride Request
                       </Label>
                     </div>
                     <div className="flex items-center space-x-2">
                       <RadioGroupItem value="Offer" id="Offer" />
-                      <Label htmlFor="Offer" className="text-lg">
+                      <Label htmlFor="Offer" className="text-md">
                         Ride Offer
                       </Label>
                     </div>
@@ -244,19 +260,39 @@ function EditListing() {
                   />
                 </div>
               </div>
-              {/* <div>
-                <h2 className="font-lg text-gray-500 my-2">Upload Images</h2>
-                <FileUpload setImages={(value)=>setImages(value)}/>
-              </div> */}
+
               <div className="flex gap-7 justify-end">
-                <Button
-                  type="submit"
-                  variant="outline"
-                  className="text-primary border-green-500"
-                >
-                  Save
+                <Button disabled={loading} variant="outline" type="submit">
+                  {loading ? <Loader className="animate-spin" /> : "Save"}
                 </Button>
-                <Button type="submit">Save & Publish</Button>
+
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                  <Button disabled={loading} type="button">
+                  {loading ? (
+                    <Loader className="animate-spin" />
+                  ) : (
+                    "Save & Publish"
+                  )}
+                </Button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>
+                        Ready to Publish?
+                      </AlertDialogTitle>
+                      <AlertDialogDescription>
+                        Do you really want to publish the listing?
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>Cancel</AlertDialogCancel>
+                      <AlertDialogAction onClick={()=>publishBtnHandle()}>
+                        {loading?<Loader className="animate-spin"/>: 'Continue'}
+                        </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
               </div>
             </div>
           </form>

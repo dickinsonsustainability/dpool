@@ -1,51 +1,57 @@
 'use client'
-import GoogleAddressSearch from '@/app/_components/GoogleAddressSearch';
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
+import GoogleAddressSearch from '@/app/_components/GoogleAddressSearch';
 import { supabase } from '@/utils/supabase/client';
 import { useUser } from '@clerk/nextjs';
 import { toast } from 'sonner';
 import { Loader } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
-
 function AddNewListing() {
-    const [departureAddress, setDepartureAddress] = useState();
-    const [arrivalAddress, setArrivalAddress] = useState();
-    const [departureCoordinates, setDepartureCoordinates] = useState();
-    const [arrivalCoordinates, setArrivalCoordinates] = useState();
-    const {user} = useUser();
+    const [departureAddress, setDepartureAddress] = useState(null);
+    const [arrivalAddress, setArrivalAddress] = useState(null);
+    const [departureCoordinates, setDepartureCoordinates] = useState(null);
+    const [arrivalCoordinates, setArrivalCoordinates] = useState(null);
     const [loader, setLoader] = useState(false);
-    const router=useRouter();
+    
+    const { user } = useUser();
+    const router = useRouter();
 
     const nextHandler = async () => {
+        if (!departureAddress || !arrivalAddress || !departureCoordinates || !arrivalCoordinates) {
+            toast.error("Please enter all required details.");
+            return;
+        }
+
         setLoader(true);
 
-        const { data, error } = await supabase
-            .from('listing')
-            .insert([
-                {
-                    departureAddress: departureAddress.label,
-                    arrivalAddress: arrivalAddress.label,
-                    departureCoordinates: departureCoordinates,
-                    arrivalCoordinates: arrivalCoordinates,
-                    createdBy: user?.primaryEmailAddress.emailAddress,
-                },
-            ])
-            .select();
+        try {
+            const { data, error } = await supabase
+                .from('listing')
+                .insert([
+                    {
+                        departureAddress: departureAddress.label,
+                        arrivalAddress: arrivalAddress.label,
+                        departureCoordinates,
+                        arrivalCoordinates,
+                        createdBy: user?.primaryEmailAddress?.emailAddress,
+                        type: 'ride',
+                    },
+                ])
+                .select();
 
-        if (data) {
+            if (error) throw error;
+
             setLoader(false);
-            console.log("New Data added,", data);
-            toast("New listing added");
-            router.replace('/edit-listing/'+data[0].id);
-        }
-        if (error) {
+            toast.success(`New listing added: ${departureAddress.label} → ${arrivalAddress.label}`);
+            router.replace(`/edit-listing/${data[0].id}`);
+        } catch (error) {
             setLoader(false);
-            console.log('Error');
-            toast("Server side error");
+            console.error("Database error:", error.message);
+            toast.error("Failed to add listing. Please try again.");
         }
-    }
+    };
 
     return (
         <div className='mt-10 md:mx-56 lg:mx-80'>
@@ -57,19 +63,20 @@ function AddNewListing() {
                     {/* Departure Address Input */}
                     <GoogleAddressSearch
                         label="From"
-                        selectedAddress={(value) => setDepartureAddress(value)}
-                        setCoordinates={(value) => setDepartureCoordinates(value)}
+                        selectedAddress={setDepartureAddress}
+                        setCoordinates={setDepartureCoordinates}
                     />
 
                     {/* Arrival Address Input */}
                     <GoogleAddressSearch
                         label="To"
-                        selectedAddress={(value) => setArrivalAddress(value)}
-                        setCoordinates={(value) => setArrivalCoordinates(value)}
+                        selectedAddress={setArrivalAddress}
+                        setCoordinates={setArrivalCoordinates}
                     />
 
+                    {/* Next Button */}
                     <Button
-                        disabled={!departureAddress || !arrivalAddress || !departureCoordinates || !arrivalCoordinates}
+                        disabled={loader || !departureAddress || !arrivalAddress || !departureCoordinates || !arrivalCoordinates}
                         onClick={nextHandler}
                     >
                         {loader ? <Loader className='animate-spin' /> : 'Next'}

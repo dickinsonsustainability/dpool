@@ -5,8 +5,16 @@ import Listing from "./Listing";
 import { supabase } from "@/utils/supabase/client";
 import { toast } from "sonner";
 
-function LisitingMapView({ type }) {
+function ListingMapView({ type }) {
   const [listing, setListing] = useState([]);
+  const [departureAddress, setDepartureAddress] = useState(null);
+  const [arrivalAddress, setArrivalAddress] = useState(null);
+  const [departureCoordinates, setDepartureCoordinates] = useState(null);
+  const [arrivalCoordinates, setArrivalCoordinates] = useState(null);
+  const [searchPerformed, setSearchPerformed] = useState(false);
+  const [searchDate, setSearchDate] = useState("");
+  const [passengerCount, setPassengerCount] = useState(0);
+  const [rideFrequency, setRideFrequency] = useState("");
 
   useEffect(() => {
     getLatestListing();
@@ -28,14 +36,68 @@ function LisitingMapView({ type }) {
     }
   };
 
+  const handleSearchClick = async () => {
+    setSearchPerformed(true);
+
+    console.log("Selected Departure Address:", departureAddress);
+    console.log("Selected Arrival Address:", arrivalAddress);
+    console.log("Selected Search Date:", searchDate);
+
+    const departureSearchTerm =
+      departureAddress?.value?.structured_formatting?.main_text || "";
+    const arrivalSearchTerm =
+      arrivalAddress?.value?.structured_formatting?.main_text || "";
+
+    let query = supabase
+      .from("listing")
+      .select("*")
+      .eq("active", true)
+      .gte("passenger", Number(passengerCount))
+      .eq("type", type);
+
+    if (departureSearchTerm) {
+      query = query.ilike("departureAddress", `%${departureSearchTerm}%`);
+    }
+    if (arrivalSearchTerm) {
+      query = query.ilike("arrivalAddress", `%${arrivalSearchTerm}%`);
+    }
+    if (searchDate) {
+      query = query.eq("date", searchDate);
+    }
+    if (rideFrequency && rideFrequency !== "Any") {
+      query = query.eq("frequency", rideFrequency);
+    }
+
+    const { data, error } = await query.order("id", { ascending: false });
+
+    if (data) {
+      setListing(data);
+    }
+    if (error) {
+      toast("Search Failed");
+    }
+  };
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2">
       <div>
-        <Listing listing={listing} />
+        <Listing
+          listing={listing}
+          handleSearchClick={handleSearchClick}
+          setDepartureAddress={setDepartureAddress}
+          setArrivalAddress={setArrivalAddress}
+          setDepartureCoordinates={setDepartureCoordinates}
+          setArrivalCoordinates={setArrivalCoordinates}
+          searchPerformed={searchPerformed}
+          searchDate={searchDate}
+          setSearchDate={setSearchDate}
+          setPassengerCount={setPassengerCount}
+          setRideFrequency={setRideFrequency}
+        />
       </div>
       <div>Map</div>
     </div>
   );
 }
 
-export default LisitingMapView;
+export default ListingMapView;

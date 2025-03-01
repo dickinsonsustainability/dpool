@@ -2,17 +2,9 @@
 import React, { useEffect, useState } from "react";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import {
-  Calendar as CalendarIcon,
-  Clock as ClockIcon,
-  Loader,
-} from "lucide-react";
+import { Calendar as CalendarIcon, Clock as ClockIcon, Loader } from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
@@ -21,7 +13,6 @@ import { useParams, useRouter } from "next/navigation";
 import { supabase } from "@/utils/supabase/client";
 import { toast } from "sonner";
 import { useUser } from "@clerk/nextjs";
-import FileUpload from "../_components/FileUpload";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -37,8 +28,7 @@ import {
 function EditListing() {
   const { user } = useUser();
   const router = useRouter();
-  const params = useParams();
-  const listingId = params?.id;
+  const { id: listingId } = useParams();
   const [listing, setListing] = useState(null);
   const [loading, setLoading] = useState(false);
 
@@ -57,13 +47,16 @@ function EditListing() {
       .eq("createdBy", user?.primaryEmailAddress?.emailAddress)
       .eq("id", listingId)
       .single();
-
-    if (data) {
-      setListing(data);
-    } else {
-      router.replace("/");
-    }
-  };
+      if (error) {
+        console.error("Error fetching listing:", error.message);
+        return;
+      }
+      if (data) {
+        setListing(data);
+      } else {
+        router.replace("/");
+      }
+    };
 
   const onSubmitHandler = async (formValue) => {
     if (!listingId) return;
@@ -74,6 +67,7 @@ function EditListing() {
       .from("listing")
       .update({
         type: formValue.type,
+        frequency: formValue.frequency,
         title: formValue.title,
         date: formValue.date,
         time: formValue.time,
@@ -101,6 +95,7 @@ function EditListing() {
       .from("listing")
       .update({
         type: values.type,
+        frequency: values.frequency,
         title: values.title,
         date: values.date,
         time: values.time,
@@ -139,6 +134,7 @@ function EditListing() {
           description: listing.description || "",
           profileImage: user?.imageUrl,
           fullName: user?.fullName,
+          frequency: listing.frequency || "",
         }}
         onSubmit={onSubmitHandler}
       >
@@ -173,6 +169,35 @@ function EditListing() {
                       <RadioGroupItem value="Offer" id="Offer" />
                       <Label htmlFor="Offer" className="text-md">
                         Ride Offer
+                      </Label>
+                    </div>
+                  </RadioGroup>
+                </div>
+
+                <div className="flex flex-col gap-2">
+                  <h2 className="text-slate-500">
+                    How frequent do offer or request this ride?
+                  </h2>
+                  <RadioGroup
+                    defaultValue={values.type}
+                    onValueChange={(v) => setFieldValue("frequency", v)}
+                  >
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem value="Once" id="Once" />
+                      <Label htmlFor="Once" className="text-md">
+                      Once
+                      </Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem value="Weekly" id="Weekly" />
+                      <Label htmlFor="Weekly" className="text-md">
+                      Weekly
+                      </Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem value="Daily" id="Daily" />
+                      <Label htmlFor="Daily" className="text-md">
+                      Daily
                       </Label>
                     </div>
                   </RadioGroup>

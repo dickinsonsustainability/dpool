@@ -33,7 +33,7 @@ function Header() {
           <Link href={"/ride-offer"}>
             <li
               className={`hover:text-primary text-base font-semibold cursor-pointer ${
-                path === "/ride-offer" ? "text-primary" : ""
+                path === "/ride-offer" || path === "/" ? "text-primary" : ""
               }`}
             >
               Ride Offer

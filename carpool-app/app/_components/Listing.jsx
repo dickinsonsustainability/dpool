@@ -1,10 +1,98 @@
-import { Calendar, CircleDollarSign, Clock, MapPin, UserRound } from "lucide-react";
+import {
+  Calendar,
+  Car,
+  CircleDollarSign,
+  Clock,
+  MapPin,
+  Search,
+  UserRound,
+} from "lucide-react";
 import React from "react";
+import GoogleAddressSearch from "./GoogleAddressSearch";
+import { Button } from "@/components/ui/button";
+import FilterSection from "./FilterSection";
 
-function Listing({ listing = [] }) {
+function Listing({
+  listing = [],
+  handleSearchClick,
+  setDepartureAddress,
+  setArrivalAddress,
+  setDepartureCoordinates,
+  setArrivalCoordinates,
+  searchPerformed,
+  searchDate,
+  setSearchDate,
+  setPassengerCount,
+  setRideFrequency,
+}) {
+  // Handle date change
+  const handleDateChange = (e) => {
+    setSearchDate(e.target.value);
+  };
+
+  // Reusable component for trip details (departure/arrival)
+  const TripDetail = ({ icon: Icon, text }) => (
+    <h2 className="flex gap-2 text-sm text-gray-400">
+      <Icon className="h-4 w-4" />
+      {text}
+    </h2>
+  );
+
+  // Reusable component for meta details (passenger, price, frequency)
+  const TripMeta = ({ icon: Icon, text }) => (
+    <h2 className="flex gap-2 text-sm bg-slate-200 rounded-md p-2 w-full text-gray-500 justify-center items-center">
+      <Icon className="h-4 w-4" />
+      {text}
+    </h2>
+  );
+
   return (
     <div>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="mt-2 flex flex-col gap-4">
+        {/* Address Inputs */}
+        <GoogleAddressSearch
+          label="Enter departure address"
+          selectedAddress={setDepartureAddress}
+          setCoordinates={setDepartureCoordinates}
+        />
+        <GoogleAddressSearch
+          label="Enter arrival address"
+          selectedAddress={setArrivalAddress}
+          setCoordinates={setArrivalCoordinates}
+        />
+
+        {/* Date Picker */}
+        <div className="flex items-center w-full">
+          <Calendar className="h-10 w-10 p-2 rounded-l-lg text-primary bg-green-200" />
+          <input
+            type="date"
+            id="date"
+            value={searchDate}
+            onChange={handleDateChange}
+            className="px-3 py-1.5 border border-gray-300 mt-[-2px] focus:outline-none w-full rounded-r-lg appearance-none"
+          />
+        </div>
+
+        {/* Search Button */}
+        <Button className="flex gap-2 mt-2 text-base" onClick={handleSearchClick}>
+          <Search className="h-4 w-4" />
+          Search
+        </Button>
+      </div>
+
+      <FilterSection setPassengerCount={setPassengerCount} setRideFrequency={setRideFrequency} />
+
+      {/* Search Results */}
+      {searchPerformed && (
+        <div className="px-3 mt-4 font-semibold text-lg">
+          {listing.length > 0
+            ? `Found ${listing.length} trip${listing.length > 1 ? "s" : ""} matched.`
+            : "No trips matched."}
+        </div>
+      )}
+
+      {/* Render listing items */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
         {listing.length > 0
           ? listing.map((item, index) => (
               <div key={index} className="p-3 hover:border hover:border-primary cursor-pointer rounded-lg">
@@ -12,35 +100,21 @@ function Listing({ listing = [] }) {
                   <h2 className="font-bold text-xl">{item?.title}</h2>
                   <div className="flex gap-2 mt-2 justify-between">
                     <div>
-                      <h2 className="flex gap-2 text-sm text-gray-400">
-                        <MapPin className="h-4 w-4" />
-                        {item?.departureAddress}
-                      </h2>
-                      <h2 className="flex gap-2 text-sm text-gray-400">
-                        <MapPin className="h-4 w-4" />
-                        {item?.arrivalAddress}
-                      </h2>
+                      <TripDetail icon={MapPin} text={item?.departureAddress} />
+                      <TripDetail icon={MapPin} text={item?.arrivalAddress} />
                     </div>
                     <div>
-                      <h2 className="flex gap-2 text-sm text-gray-400">
-                        <Calendar className="h-4 w-4" />
-                        {item?.date}
-                      </h2>
-                      <h2 className="flex gap-2 text-sm text-gray-400">
-                        <Clock className="h-4 w-4" />
-                        {item?.time}
-                      </h2>
+                      <TripDetail icon={Calendar} text={item?.date} />
+                      <TripDetail icon={Clock} text={item?.time} />
                     </div>
                   </div>
                   <div className="flex gap-2 mt-2 justify-between">
-                    <h2 className="flex gap-2 text-sm bg-slate-200 rounded-md p-2 w-full text-gray-500 justify-center items-center">
-                      <UserRound className="h-4 w-4" />
-                      {item?.passenger}
-                    </h2>
-                    <h2 className="flex gap-2 text-sm bg-slate-200 rounded-md p-2 w-full text-gray-500 justify-center items-center">
-                      <CircleDollarSign className="h-4 w-4" />
-                      {typeof item?.price === "number" ? `$${item.price}` : item?.price}
-                    </h2>
+                    <TripMeta icon={UserRound} text={item?.passenger} />
+                    <TripMeta
+                      icon={CircleDollarSign}
+                      text={typeof item?.price === "number" ? `$${item.price}` : item?.price}
+                    />
+                    <TripMeta icon={Car} text={item?.frequency} />
                   </div>
                 </div>
               </div>

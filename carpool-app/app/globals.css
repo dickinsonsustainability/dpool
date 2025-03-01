@@ -67,6 +67,20 @@ h1, h2, h3 {  /* If you want headings to use the system font too */
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
   }
+
+  /* Remove the calendar picker icon */
+input[type="date"]::-webkit-calendar-picker-indicator {
+  display: none;
+}
+
+/* Remove default styling on all browsers */
+input[type="date"] {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  
+}
+
 }
 
 @layer base {

@@ -1,9 +1,10 @@
-'use client'
+'use client';
 
 import React, { useEffect, useState } from "react";
 import Listing from "./Listing";
 import { supabase } from "@/utils/supabase/client";
 import { toast } from "sonner";
+import GoogleMapSection from "./GoogleMapSection";
 
 function ListingMapView({ type }) {
   const [listing, setListing] = useState([]);
@@ -38,10 +39,6 @@ function ListingMapView({ type }) {
 
   const handleSearchClick = async () => {
     setSearchPerformed(true);
-
-    console.log("Selected Departure Address:", departureAddress);
-    console.log("Selected Arrival Address:", arrivalAddress);
-    console.log("Selected Search Date:", searchDate);
 
     const departureSearchTerm =
       departureAddress?.value?.structured_formatting?.main_text || "";
@@ -79,7 +76,7 @@ function ListingMapView({ type }) {
   };
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
       <div>
         <Listing
           listing={listing}
@@ -95,7 +92,15 @@ function ListingMapView({ type }) {
           setRideFrequency={setRideFrequency}
         />
       </div>
-      <div>Map</div>
+      <div className=" right-10 flex items-center md:w-[400px] lg:w-[400px] xl:w-[600px]">
+        <div className="h-[90vh] w-full">
+          <GoogleMapSection
+            listing={listing}
+            departureCoordinates={departureCoordinates}
+            arrivalCoordinates={arrivalCoordinates}
+          />
+        </div>
+      </div>
     </div>
   );
 }

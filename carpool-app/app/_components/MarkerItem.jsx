@@ -16,7 +16,7 @@ function MarkerItem({ item }) {
   };
 
   return (
-    <div>
+    <>
       {/* Departure Marker */}
       <Marker
         position={{
@@ -72,7 +72,7 @@ function MarkerItem({ item }) {
           </OverlayView>
         )}
       </Marker>
-    </div>
+    </>
   );
 }
 

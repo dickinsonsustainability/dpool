@@ -9,8 +9,9 @@ import {
 } from "lucide-react";
 import React from "react";
 import GoogleAddressSearch from "./GoogleAddressSearch";
-import { Button } from "@/components/ui/button";
+import { Button } from "../../components/ui/button";
 import FilterSection from "./FilterSection";
+import Link from "next/link"; // Import the Link component
 
 function Listing({
   listing = [],
@@ -95,29 +96,31 @@ function Listing({
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
         {listing.length > 0
           ? listing.map((item, index) => (
-              <div key={index} className="p-3 hover:border hover:border-primary cursor-pointer rounded-lg">
-                <div className="flex mt-2 flex-col gap-2">
-                  <h2 className="font-bold text-xl">{item?.title}</h2>
-                  <div className="flex gap-2 mt-2 justify-between">
-                    <div>
-                      <TripDetail icon={MapPin} text={item?.departureAddress} />
-                      <TripDetail icon={MapPin} text={item?.arrivalAddress} />
+              <Link href={`/view-listing/${item.id}`} key={index}> {/* Wrap the listing item with Link */}
+                <div className="p-3 hover:border hover:border-primary cursor-pointer rounded-lg">
+                  <div className="flex mt-2 flex-col gap-2">
+                    <h2 className="font-bold text-xl">{item?.title}</h2>
+                    <div className="flex gap-2 mt-2 justify-between">
+                      <div>
+                        <TripDetail icon={MapPin} text={item?.departureAddress} />
+                        <TripDetail icon={MapPin} text={item?.arrivalAddress} />
+                      </div>
+                      <div>
+                        <TripDetail icon={Calendar} text={item?.date} />
+                        <TripDetail icon={Clock} text={item?.time} />
+                      </div>
                     </div>
-                    <div>
-                      <TripDetail icon={Calendar} text={item?.date} />
-                      <TripDetail icon={Clock} text={item?.time} />
+                    <div className="flex gap-2 mt-2 justify-between">
+                      <TripMeta icon={UserRound} text={item?.passenger} />
+                      <TripMeta
+                        icon={CircleDollarSign}
+                        text={typeof item?.price === "number" ? `$${item.price}` : item?.price}
+                      />
+                      <TripMeta icon={Car} text={item?.frequency} />
                     </div>
-                  </div>
-                  <div className="flex gap-2 mt-2 justify-between">
-                    <TripMeta icon={UserRound} text={item?.passenger} />
-                    <TripMeta
-                      icon={CircleDollarSign}
-                      text={typeof item?.price === "number" ? `$${item.price}` : item?.price}
-                    />
-                    <TripMeta icon={Car} text={item?.frequency} />
                   </div>
                 </div>
-              </div>
+              </Link>
             ))
           : Array.from({ length: 8 }).map((_, index) => (
               <div key={index} className="h-[230px] w-full bg-slate-200 animate-pulse rounded-lg"></div>

@@ -16,7 +16,7 @@ const defaultCenter = {
   lng: -77.1911,
 };
 
-function GoogleMapSection({ arrivalCoordinates, departureCoordinates, listing }) {
+function GoogleMapSection({ arrivalCoordinates, departureCoordinates, listing = [] }) {
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_PLACE_API_KEY,
@@ -74,9 +74,10 @@ function GoogleMapSection({ arrivalCoordinates, departureCoordinates, listing })
       <GoogleMap
         mapContainerStyle={containerStyle}
         center={center}
-        zoom={15}
+        zoom={12}
         onLoad={onLoad}
         onUnmount={onUnmount}
+        gestureHandling="greedy"
       >
         {/* Markers for listings */}
         {Object.values(groupedListings).map((item, index) => (

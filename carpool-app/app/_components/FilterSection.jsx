@@ -1,11 +1,5 @@
 import React from "react";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "../../components/ui/select";
 import { Car, UserRound } from "lucide-react";
 
 function FilterSection({ setPassengerCount, setRideFrequency }) {

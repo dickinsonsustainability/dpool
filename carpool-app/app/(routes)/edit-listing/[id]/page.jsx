@@ -133,7 +133,8 @@ function EditListing() {
           price: listing.price || "",
           description: listing.description || "",
           profileImage: user?.imageUrl,
-          fullName: user?.fullName,
+          firstName: user?.firstName,
+          lastName: user?.lastName,
           frequency: listing.frequency || "",
         }}
         onSubmit={onSubmitHandler}

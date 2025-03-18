@@ -49,13 +49,13 @@ function FileUpload({ setImages = () => {} }) {
             multiple
             className="hidden"
             onChange={handleFileUpload}
-            accept="image/png, image/jpeg, image/gif"
+            accept="image/png, image/jpeg, image/gif, image/jpg"
           />
         </label>
       </div>
 
       {/* Image Previews */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 mt-3">
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-7 xl:grid-cols-10 gap-3 mt-3">
         {imagePreview.map((image, index) => (
           <img
             key={index}

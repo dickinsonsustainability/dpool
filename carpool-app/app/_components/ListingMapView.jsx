@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import Listing from "./Listing";
-import { supabase } from "@/utils/supabase/client";
+import { supabase } from "../../utils/supabase/client";
 import { toast } from "sonner";
 import GoogleMapSection from "./GoogleMapSection";
 
@@ -92,7 +92,7 @@ function ListingMapView({ type }) {
           setRideFrequency={setRideFrequency}
         />
       </div>
-      <div className=" right-10 flex items-center md:w-[400px] lg:w-[400px] xl:w-[600px]">
+      <div className=" right-10 fixed flex items-center md:w-[400px] lg:w-[400px] xl:w-[600px]">
         <div className="h-[90vh] w-full">
           <GoogleMapSection
             listing={listing}

@@ -1,10 +1,9 @@
-import Image from "next/image";
-import LisitingMapView from "./_components/LisitingMapView";
+import ListingMapView from "./_components/ListingMapView";
 
 export default function Home() {
   return (
     <div className="px-10 p-10">
-      <LisitingMapView type="Offer"/>
+      <ListingMapView type="Offer"/>
     </div>
   );
 }

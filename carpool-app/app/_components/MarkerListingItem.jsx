@@ -1,6 +1,16 @@
-import { Button } from '@/components/ui/button';
-import { MapPin, Calendar, Clock, UserRound, CircleDollarSign, Car, X, ChevronLeft, ChevronRight } from 'lucide-react';
-import React, { useState } from 'react';
+import { Button } from "../../components/ui/button";
+import {
+  MapPin,
+  Calendar,
+  Clock,
+  UserRound,
+  CircleDollarSign,
+  X,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react";
+import Link from "next/link";
+import React, { useState } from "react";
 
 // Reusable component for trip details (departure/arrival)
 const TripDetail = ({ icon: Icon, text }) => (
@@ -52,15 +62,28 @@ function MarkerListingItem({ items, closeHandler }) {
           <TripMeta icon={UserRound} text={currentItem?.passenger} />
           <TripMeta
             icon={CircleDollarSign}
-            text={typeof currentItem?.price === "number" ? `$${currentItem.price}` : currentItem?.price}
+            text={
+              typeof currentItem?.price === "number"
+                ? `$${currentItem.price}`
+                : currentItem?.price
+            }
           />
-          {/* <TripMeta icon={Car} text={currentItem?.frequency} /> */}
         </div>
-        <Button size="sm" className="mt-2">View Detail</Button>
+        <Link href={'/view-listing/'+items.id}>
+        <Button size="sm" className="mt-2">
+          View Detail
+        </Button>
+        </Link>
       </div>
       <div className="flex justify-between mt-2">
-        <ChevronLeft className="h-4 w-4 cursor-pointer" onClick={handlePrevious} />
-        <ChevronRight className="h-4 w-4 cursor-pointer" onClick={handleNext} />
+        <ChevronLeft
+          className="h-4 w-4 cursor-pointer"
+          onClick={handlePrevious}
+        />
+        <ChevronRight
+          className="h-4 w-4 cursor-pointer"
+          onClick={handleNext}
+        />
       </div>
     </div>
   );

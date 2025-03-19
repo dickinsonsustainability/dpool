@@ -77,6 +77,7 @@ function ListingMapView({ type }) {
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+      {/* md:grid-cols-2 */}
       <div>
         <Listing
           listing={listing}
@@ -92,7 +93,8 @@ function ListingMapView({ type }) {
           setRideFrequency={setRideFrequency}
         />
       </div>
-      <div className=" right-10 fixed flex items-center md:w-[400px] lg:w-[400px] xl:w-[600px]">
+      <div className=" right-10 fixed flex items-center lg:w-[400px] xl:w-[600px]">
+      {/* md:w-[400px] */}
         <div className="h-[90vh] w-full">
           <GoogleMapSection
             listing={listing}

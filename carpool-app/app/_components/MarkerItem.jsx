@@ -5,12 +5,14 @@ import MarkerListingItem from "./MarkerListingItem";
 function MarkerItem({ item }) {
   const [selectedListing, setSelectedListing] = useState(null);
   const [isDeparture, setIsDeparture] = useState(true); // Track if the clicked pin is departure or arrival
+  const [disabled, setDisabled] = useState(true); // Add a disabled state
 
   // Group listings by coordinates
   const listingsAtDeparture = item.departureListings || [item];
   const listingsAtArrival = item.arrivalListings || [item];
 
   const handleMarkerClick = (isDeparturePin) => {
+    if (disabled) return; // Prevent click if disabled
     setSelectedListing(isDeparturePin ? listingsAtDeparture : listingsAtArrival);
     setIsDeparture(isDeparturePin);
   };

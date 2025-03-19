@@ -12,10 +12,22 @@ import {
 import React from "react";
 import AgentDetail from "./AgentDetail";
 
+
 function Details({ listingDetail }) {
   if (!listingDetail) {
     return <p>No listing details available.</p>;
   }
+
+  const handleShare = () => {
+    const currentUrl = window.location.href; // Get current page URL
+    navigator.clipboard
+      .writeText(currentUrl)
+      .then(() => {
+        console.log("URL copied to clipboard!");
+        alert("Listing link copied to clipboard!"); // Optional: show user confirmation
+      })
+      .catch((error) => console.error("Error copying URL:", error));
+  };
 
   // Extract coordinates for departure and arrival
   const departureCoordinates = listingDetail.departureCoordinates;
@@ -46,7 +58,7 @@ function Details({ listingDetail }) {
               <span>{listingDetail.time}</span>
             </div>
           </div>
-          <Button className="flex gap-2 mt-4">
+          <Button className="flex gap-2 mt-4" onClick={handleShare}>
             <Share size={18} />
             Share
           </Button>
@@ -91,7 +103,7 @@ function Details({ listingDetail }) {
         />
       </div> */}
       <div>
-      <h2 className="font-bold text-2xl mb-2">Contact</h2>
+        <h2 className="font-bold text-2xl mb-2">Contact</h2>
         <AgentDetail listingDetail={listingDetail} />
       </div>
     </div>

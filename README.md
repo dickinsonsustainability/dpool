@@ -1,7 +1,7 @@
 # **DPool - Ride Sharing for Dickinson College**  
 🚗 **DPool** is a ride-sharing platform designed for Dickinson College students to coordinate carpooling efficiently.
 
-![DPool Homepage](assets/dpool-homepage.png)
+![DPool Homepage](asset/dpool-homepage.png)
 
 ## **🚀 Features**
 - 📍 **Find & Offer Rides** – Users can post or search for available rides.

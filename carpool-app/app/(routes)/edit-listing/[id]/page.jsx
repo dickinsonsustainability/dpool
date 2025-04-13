@@ -103,6 +103,7 @@ function EditListing() {
         price: values.price,
         description: values.description,
         active: true, // Now setting active to true when publishing
+        status: "Published",
       })
       .eq("id", listingId);
 

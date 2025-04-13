@@ -51,17 +51,26 @@ function Header() {
               />
             </DropdownMenuTrigger>
             <DropdownMenuContent>
-              <DropdownMenuItem className={path === "/ride-offer" ? "text-primary font-bold" : ""}>
+              <DropdownMenuItem
+                className={
+                  path === "/ride-offer" ? "text-primary font-bold" : ""
+                }
+              >
                 <Link href={"/ride-offer"}>Ride Offer</Link>
               </DropdownMenuItem>
-              <DropdownMenuItem className={path === "/ride-request" ? "text-primary font-bold" : ""}>
+              <DropdownMenuItem
+                className={
+                  path === "/ride-request" ? "text-primary font-bold" : ""
+                }
+              >
                 <Link href={"/ride-request"}>Ride Request</Link>
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem>
-                <Link href={"/add-new-listing"}> <Button className="font-semibold">
-                    Post Your Ride
-                  </Button></Link>
+                <Link href={"/add-new-listing"}>
+                  {" "}
+                  <Button className="font-semibold">Post Your Ride</Button>
+                </Link>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -104,13 +113,13 @@ function Header() {
         </ul>
       </div>
       <div className="flex gap-2 items-center">
-         {/* Post Your Ride button only visible on larger screens */}
-         <div className="hidden md:block">
-        <Link href={"/add-new-listing"}>
-          <Button className="flex gap-2 font-semibold text-base">
-            <Plus className="h-5 w-5" /> Post Your Ride
-          </Button>
-        </Link>
+        {/* Post Your Ride button only visible on larger screens */}
+        <div className="hidden md:block">
+          <Link href={"/add-new-listing"}>
+            <Button className="flex gap-2 font-semibold text-base">
+              <Plus className="h-5 w-5" /> Post Your Ride
+            </Button>
+          </Link>
         </div>
         {isSignedIn ? (
           <DropdownMenu>
@@ -127,14 +136,30 @@ function Header() {
             <DropdownMenuContent>
               <DropdownMenuLabel>My Account</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>
-                <Link href={"/user"}>Profile</Link>
+              <DropdownMenuItem
+                className={path === "/user" ? "text-primary font-bold" : ""}
+              >
+                <Link href="/user" className="w-full h-full">
+                  Profile
+                </Link>
               </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Link href="/guideline">Guideline</Link>
+              <DropdownMenuItem
+                className={
+                  path === "/guideline" ? "text-primary font-bold" : ""
+                }
+              >
+                <Link href="/guideline" className="w-full h-full">
+                  Guideline
+                </Link>
               </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Link href="/feedback">Feedback</Link>
+              <DropdownMenuItem
+                className={
+                  path === "/feedback" ? "text-primary font-bold" : ""
+                }
+              >
+                <Link href="/feedback" className="w-full h-full">
+                  Feedback
+                </Link>
               </DropdownMenuItem>
               <DropdownMenuItem>
                 <SignOutButton>Logout</SignOutButton>

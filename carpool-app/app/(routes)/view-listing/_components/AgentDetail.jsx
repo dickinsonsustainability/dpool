@@ -3,15 +3,16 @@ import { Button } from "@/components/ui/button";
 import Image from "next/image";
 
 function AgentDetail({ listingDetail }) {
-  const copyEmail = () => {
-    navigator.clipboard.writeText(listingDetail?.email)
-      .then(() => {
-        alert("Driver's email copied to clipboard!");
-      })
-      .catch((error) => {
-        console.error("Error copying email:", error);
-        alert("Failed to copy email.");
-      });
+  const sendEmail = () => {
+    const subject = encodeURIComponent("Ride Inquiry from DPool");
+    const body = encodeURIComponent("Hi, I'm interested in your ride listing on DPool!");
+    const email = listingDetail?.email;
+
+    if (email) {
+      window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
+    } else {
+      alert("No email address available.");
+    }
   };
 
   return (
@@ -32,7 +33,7 @@ function AgentDetail({ listingDetail }) {
         </div>
       </div>
 
-      <Button onClick={copyEmail} className="w-full md:w-auto">
+      <Button onClick={sendEmail} className="w-full md:w-auto">
         Send Message
       </Button>
     </div>

@@ -103,6 +103,6 @@ input[type="date"] {
   }
 }
 
-.alert-dialog-overlay {
-  background-color: rgba(0, 0, 0, 0.3); /* Change the color and opacity as desired */
+.radix-AlertDialogOverlay {
+  @apply bg-black bg-opacity-50 backdrop-blur-sm;
 }

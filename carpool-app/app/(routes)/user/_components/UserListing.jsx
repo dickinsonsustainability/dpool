@@ -170,15 +170,14 @@ function UserListing() {
                   Completed
                 </Button>
 
-                <AlertDialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+                <AlertDialog>
                   <AlertDialogTrigger asChild>
                     <Button
                       size="sm"
                       variant="destructive"
                       className="w-full"
                       onClick={() => {
-                        setSelectedListingId(item.id); // Set the listing ID for deletion
-                        setIsDialogOpen(true); // Open the dialog
+                        setSelectedListingId(item.id); // Set the ID to delete
                       }}
                     >
                       <Trash />
@@ -194,10 +193,8 @@ function UserListing() {
                       </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
-                      <AlertDialogCancel onClick={() => setIsDialogOpen(false)}>
-                        Cancel
-                      </AlertDialogCancel>
-                      <AlertDialogAction onClick={handleDelete}>
+                      <AlertDialogCancel>Cancel</AlertDialogCancel>
+                      <AlertDialogAction onClick={() => handleDelete(selectedListingId)}>
                         Delete
                       </AlertDialogAction>
                     </AlertDialogFooter>

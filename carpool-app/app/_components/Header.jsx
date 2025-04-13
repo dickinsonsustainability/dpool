@@ -51,10 +51,10 @@ function Header() {
               />
             </DropdownMenuTrigger>
             <DropdownMenuContent>
-              <DropdownMenuItem>
+              <DropdownMenuItem className={path === "/ride-offer" ? "text-primary font-bold" : ""}>
                 <Link href={"/ride-offer"}>Ride Offer</Link>
               </DropdownMenuItem>
-              <DropdownMenuItem>
+              <DropdownMenuItem className={path === "/ride-request" ? "text-primary font-bold" : ""}>
                 <Link href={"/ride-request"}>Ride Request</Link>
               </DropdownMenuItem>
               <DropdownMenuSeparator />

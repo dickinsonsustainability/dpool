@@ -106,6 +106,12 @@ function Details({ listingDetail }) {
         <h2 className="font-bold text-2xl mb-2">Contact</h2>
         <AgentDetail listingDetail={listingDetail} />
       </div>
+
+      {/* <hr className="my-4" />
+      <di>
+      <h2 className="font-bold text-2xl mb-2">Comment</h2>
+      </di> */}
+
     </div>
   );
 }

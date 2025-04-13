@@ -145,17 +145,26 @@ function UserListing() {
               </div>
               <div className="flex gap-2 justify-between mt-4">
                 <Link href={`/view-listing/${item.id}`} className="w-full">
-                  <Button size="sm" variant="outline" className="border-gray-300 text-gray-700 w-full">
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="border-gray-300 text-gray-700 w-full"
+                  >
                     View
                   </Button>
                 </Link>
                 <Link href={`/edit-listing/${item.id}`} className="w-full">
-                  <Button size="sm" className="bg-blue-500 hover:bg-blue-600 text-white w-full">Edit</Button>
+                  <Button
+                    size="sm"
+                    className="bg-blue-500 hover:bg-blue-600 text-white w-full"
+                  >
+                    Edit
+                  </Button>
                 </Link>
                 <Button
-                   size="sm"
-                   variant="default"
-                   className="text-white w-full"
+                  size="sm"
+                  variant="default"
+                  className="text-white w-full"
                   onClick={() => handleArchive(item.id)}
                 >
                   Completed

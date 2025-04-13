@@ -11,9 +11,9 @@ function FilterSection({ setPassengerCount, setRideFrequency }) {
   );
 
   return (
-    <div className="px-3 py-2 grid grid-cols-2 md:flex gap-2">
+    <div className="px-3 py-2 grid grid-cols-2 gap-2 w-full">
       <Select onValueChange={(value) => setPassengerCount(Number(value))}>
-        <SelectTrigger className="w-[180px]">
+        <SelectTrigger className="w-full">
           <SelectValue placeholder="Passenger" />
         </SelectTrigger>
         <SelectContent>
@@ -27,22 +27,22 @@ function FilterSection({ setPassengerCount, setRideFrequency }) {
           </SelectItem>
         </SelectContent>
       </Select>
-
+  
       <Select onValueChange={(value) => (value === "Any" ? setRideFrequency(null) : setRideFrequency(value))}>
-  <SelectTrigger className="w-[180px]">
-    <SelectValue placeholder="Frequency" />
-  </SelectTrigger>
-  <SelectContent>
-    {["Any", "Once", "Weekly", "Daily"].map((freq) => (
-      <SelectItem key={freq} value={freq}>
-        {renderOption(<Car className="h-5 w-5 text-primary" />, freq)}
-      </SelectItem>
-    ))}
-  </SelectContent>
-</Select>
-
+        <SelectTrigger className="w-full">
+          <SelectValue placeholder="Frequency" />
+        </SelectTrigger>
+        <SelectContent>
+          {["Any", "Once", "Weekly", "Daily"].map((freq) => (
+            <SelectItem key={freq} value={freq}>
+              {renderOption(<Car className="h-5 w-5 text-primary" />, freq)}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
     </div>
   );
+  
 }
 
 export default FilterSection;

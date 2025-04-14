@@ -3,16 +3,16 @@ import { Button } from "@/components/ui/button";
 import Image from "next/image";
 
 function AgentDetail({ listingDetail }) {
-  const sendEmail = () => {
-    const subject = encodeURIComponent("Ride Inquiry from DPool");
-    const body = encodeURIComponent("Hi, I'm interested in your ride listing on DPool!");
-    const email = listingDetail?.email;
-
-    if (email) {
-      window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
-    } else {
-      alert("No email address available.");
-    }
+  // Function to copy the agent's email to the clipboard
+  const copyEmail = () => {
+    navigator.clipboard.writeText(listingDetail?.email)
+      .then(() => {
+        alert("Driver's email copied to clipboard!");
+      })
+      .catch((error) => {
+        console.error("Error copying email:", error);
+        alert("Failed to copy email.");
+      });
   };
 
   return (
@@ -26,16 +26,13 @@ function AgentDetail({ listingDetail }) {
           className="rounded-full object-cover"
         />
         <div>
-          <h2 className="text-base md:text-lg font-bold">
+        <h2 className="text-base md:text-lg font-bold">
             {listingDetail?.firstName} {listingDetail?.lastName}
           </h2>
           <h2 className="text-sm text-gray-500 break-all">{listingDetail?.createdBy}</h2>
         </div>
       </div>
-
-      <Button onClick={sendEmail} className="w-full md:w-auto">
-        Send Message
-      </Button>
+      <Button onClick={copyEmail} className="w-full md:w-auto">Send Message</Button>
     </div>
   );
 }
